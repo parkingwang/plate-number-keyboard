@@ -2,9 +2,8 @@ import Letter from "../fund/letter";
 import H5 from "./h5";
 
 class MiniApp {
-    constructor(container) {
+    constructor() {
         this.buttonlayout = {}
-        this.container = container
     }
 
     //外层包裹元素

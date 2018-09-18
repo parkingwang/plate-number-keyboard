@@ -4,16 +4,15 @@ import MiniApp from './adpter/mini-app'
 import   "./css/keyboard.css"
 
 export default class IrainPlateKeyboard {
-    constructor(type, container) {
+    constructor(type) {
         switch (type) {
             case 'h5':
-                this.appType = new H5(container)
+                this.appType = new H5()
                 break;
             default:
-                this.appType = new MiniApp(container)
+                this.appType = new MiniApp()
         }
         this.vpl = []
-        this.container = container
         this.init()
     }
 

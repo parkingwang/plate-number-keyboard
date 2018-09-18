@@ -1,9 +1,8 @@
 import Letter from "../fund/letter";
 
 class H5 {
-    constructor(container) {
+    constructor() {
         this.buttonlayout = {}
-        this.container = document.querySelector(container)
     }
 
     //外层包裹元素
@@ -18,6 +17,7 @@ class H5 {
 
     //显示键盘
     show() {
+        console.log(this.container)
         this.container.setAttribute("style", "display:block")
     }
 
@@ -38,7 +38,11 @@ class H5 {
 
     //设置内容区域
     setContainerContent(content) {
-        this.container.innerHTML = content
+        let template = `<${this.wrap()} id="irain-plate-keyboard">`
+        template+=content
+        template+=`</${this.wrap()}>`
+        document.write(template)
+        this.container = document.querySelector("#irain-plate-keyboard")
     }
 
     //获取单个页面布局
@@ -47,12 +51,7 @@ class H5 {
         if (this.buttonlayout[layoutType]) {
             return this.buttonlayout
         }
-
         let itemValues = Letter[layoutType]()
-
-        console.log(itemValues)
-
-
         let template = `<${this.wrap()} class="${prefix}-${layoutType}-external">`
         for (let index in itemValues) {
             let value = itemValues[index]
