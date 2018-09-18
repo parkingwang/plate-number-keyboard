@@ -1,6 +1,5 @@
 import Letter from "../fund/letter";
 
-
 class H5 {
     constructor(container) {
         this.buttonlayout = {}
@@ -76,11 +75,8 @@ class H5 {
                 template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定}</${this.item()}>`
                 break;
         }
-
-
-        return template
-
         template += `</${this.wrap()}>`
+        return template
 
     }
 }

@@ -1,6 +1,7 @@
 import Letter from './fund/letter'
 import H5 from './adpter/h5'
 import MiniApp from './adpter/mini-app'
+import   "./css/keyboard.css"
 
 export default class IrainPlateKeyboard {
     constructor(type, container) {
@@ -36,9 +37,19 @@ export default class IrainPlateKeyboard {
      * @returns {*}
      */
     view() {
-        this.appType.getButtonLayout("getProvinces", 0)
+        let template = ""
+        //省份键盘
+        template+=this.appType.getButtonLayout("getProvinces", 0)
+        //数字和字母包括i
+        template+=this.appType.getButtonLayout("getNumberAndLetterHasI", 3)
+        //数字和字母不包括i
+        template+=this.appType.getButtonLayout("getNumberAndLetterNotHasI", 0)
+        //学警港
+        template+=this.appType.getButtonLayout("getStudy", 1)
+        //民使
+        template+=this.appType.getButtonLayout("getPeople", 1)
 
-        return this.appType.getButtonLayout("getProvinces", 0)
+        return template
     }
 
     /**
