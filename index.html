@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="keyboard">
+</div>
+<button id="open">打开</button>
+<button id="close">关闭</button>
+<script src="dist/keyboard.js"></script>
+<script>
+    let keyboard = new IrainPlateKeyboard("h5","#keyboard")
+    document.querySelector("#open").addEventListener("click",function () {
+        keyboard.show()
+    })
+    document.querySelector("#close").addEventListener("click",function () {
+        keyboard.close()
+    })
+</script>
+</body>
+</html>
