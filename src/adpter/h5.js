@@ -1,46 +1,49 @@
 import Letter from "../fund/letter";
 
 
-class  H5 {
-     constructor(container) {
-         this.buttonlayout = {}
-         this.container = document.querySelector(container)
-     }
+class H5 {
+    constructor(container) {
+        this.buttonlayout = {}
+        this.container = document.querySelector(container)
+    }
+
     //外层包裹元素
-    wrap (){
+    wrap() {
         return 'div';
     }
 
     //按钮元素
-    item (){
-       return 'div'
+    item() {
+        return 'div'
     }
 
     //显示键盘
-    show (){
-        this.container.setAttribute("style","display:block")
+    show() {
+        this.container.setAttribute("style", "display:block")
     }
 
     //关闭键盘
-    close (){
-        this.container.setAttribute("style","display:none")
+    close() {
+        this.container.setAttribute("style", "display:none")
     }
-    
+
     //点击操作
-    input (value){
-       return value
+    input(value) {
+        return value
     }
-     
+
     //删除操作
-    delete (){
+    delete() {
 
     }
 
-    setContainerContent(content){
+    //设置内容区域
+    setContainerContent(content) {
         this.container.innerHTML = content
     }
 
-    getButtonLayout(layoutType,type=1) {
+    //获取单个页面布局
+    getButtonLayout(layoutType, type = 1) {
         let prefix = "irain-keyborad"
         if (this.buttonlayout[layoutType]) {
             return this.buttonlayout
@@ -59,18 +62,18 @@ class  H5 {
 
         switch (type) {
             case 0:
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-more">更多</${this.item()}>`
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-close"></${this.item()}>`
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定</${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-more">更多</${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-close"></${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定</${this.item()}>`
                 break
             case 1:
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-back">返回</${this.item()}>`
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-close"></${this.item()}>`
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定}</${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-back">返回</${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-close"></${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定}</${this.item()}>`
                 break;
             default:
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-close"></${this.item()}>`
-                template+=` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定}</${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-close"></${this.item()}>`
+                template += ` <${this.item()} class="${prefix}-${layoutType} ${prefix}-sure">确定}</${this.item()}>`
                 break;
         }
 
@@ -82,4 +85,4 @@ class  H5 {
     }
 }
 
-export default  H5
+export default H5
