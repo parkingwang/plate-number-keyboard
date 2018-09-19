@@ -4,7 +4,8 @@
   "description": "一个适用于h5和微信小程序的车牌虚拟键盘",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"./node_modules/.bin/webpack --watch --model development"
   },
   "keywords": [
     "车牌键盘"
