@@ -4,7 +4,8 @@ import MiniApp from './adpter/mini-app'
 import   "./css/keyboard.css"
 
 export default class IrainPlateKeyboard {
-    constructor(type) {
+    constructor(options) {
+        let type = options.type
         switch (type) {
             case 'h5':
                 this.appType = new H5()
@@ -13,9 +14,9 @@ export default class IrainPlateKeyboard {
                 this.appType = new MiniApp()
         }
         this.vpl = []
+        this.updateFunction = options.updateFunction
         this.init()
     }
-
 
     /**
      * 显示键盘操作
@@ -32,21 +33,22 @@ export default class IrainPlateKeyboard {
     }
 
     /**
+     * @pageType
      * 返回键盘初始化视图
      * @returns {*}
      */
-    view() {
+    view(pageType,type) {
         let template = ""
         //省份键盘
-        template+=this.appType.getButtonLayout("getProvinces", 0)
-        //数字和字母包括i
-        template+=this.appType.getButtonLayout("getNumberAndLetterHasI", 3)
-        //数字和字母不包括i
-        template+=this.appType.getButtonLayout("getNumberAndLetterNotHasI", 0)
-        //学警港
-        template+=this.appType.getButtonLayout("getStudy", 1)
-        //民使
-        template+=this.appType.getButtonLayout("getPeople", 1)
+        template=this.appType.setContainerContent(pageType, type)
+        // //数字和字母包括i
+        // template+=this.appType.getButtonLayout("getNumberAndLetterHasI", 3)
+        // //数字和字母不包括i
+        // template+=this.appType.getButtonLayout("getNumberAndLetterNotHasI", 0)
+        // //学警港
+        // template+=this.appType.getButtonLayout("getStudy", 1)
+        // //民使
+        // template+=this.appType.getButtonLayout("getPeople", 1)
 
         return template
     }
@@ -57,7 +59,8 @@ export default class IrainPlateKeyboard {
      */
     click(value) {
         //根据不同value做不同操作赋值操作
-        //todo
+        this.vpl.push(value)
+        this.updateFunction(this.vpl)
     }
 
     /**
@@ -65,11 +68,11 @@ export default class IrainPlateKeyboard {
      */
     init() {
         let _this = this
-        this.appType.setContainerContent(this.view());
+        this.view("getProvinces", 0)
         Object.defineProperty(this.appType, "op", {
             set: function (value) {
                 //当设置值的时候触发的函数,设置的新值通过参数value拿到
-                _this.vpl = _this.click(value)
+                _this.click(value)
             }
         });
     }

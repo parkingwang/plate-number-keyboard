@@ -28,7 +28,7 @@ class H5 {
 
     //点击操作
     input(value) {
-        return value
+        this.op = value
     }
 
     //删除操作
@@ -37,25 +37,13 @@ class H5 {
     }
 
     //设置内容区域
-    setContainerContent(content) {
+    setContainerContent(layoutType, type) {
         let template = `<${this.wrap()} id="irain-plate-keyboard">`
-        template+=content
-        template+=`</${this.wrap()}>`
-        document.write(template)
-        this.container = document.querySelector("#irain-plate-keyboard")
-    }
-
-    //获取单个页面布局
-    getButtonLayout(layoutType, type = 1) {
         let prefix = "irain-keyborad"
-        if (this.buttonlayout[layoutType]) {
-            return this.buttonlayout
-        }
         let itemValues = Letter[layoutType]()
-        let template = `<${this.wrap()} class="${prefix}-${layoutType}-external">`
         for (let index in itemValues) {
             let value = itemValues[index]
-            template += ` <${this.item()} class="${prefix}-${layoutType}-${index}" onclick="this.input()">${value}</${this.item()}>`
+            template += ` <${this.item()} class="${prefix}-${layoutType}-${index}">${value}</${this.item()}>`
         }
 
         switch (type) {
@@ -75,9 +63,19 @@ class H5 {
                 break;
         }
         template += `</${this.wrap()}>`
-        return template
+        document.write(template)
+        this.container = document.querySelector("#irain-plate-keyboard")
 
+        //绑定监听事件
+        let _this = this
+        for (let index in itemValues) {
+            let item = document.querySelector(`.${prefix}-${layoutType}-${index}`).addEventListener("click", function () {
+                _this.input(itemValues[index])
+            })
+
+        }
     }
+
 }
 
 export default H5

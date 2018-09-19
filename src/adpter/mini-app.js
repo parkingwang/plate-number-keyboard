@@ -22,7 +22,7 @@ class MiniApp {
     }
 
     //关闭键盘
-    show() {
+    close() {
         //todo
     }
 
@@ -36,14 +36,8 @@ class MiniApp {
         //todo
     }
 
-    //获取页面布局
-    getButtonLayout(layoutType, type = 1) {
-
-        //todo
-    }
-
-    //设置
-    setContainerContent(content) {
+    //设置内容区域
+    setContainerContent(pageType, type) {
         //todo
     }
 }
