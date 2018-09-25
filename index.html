@@ -9,10 +9,14 @@
 
 <button id="open">打开</button>
 <button id="close">关闭</button>
+<button id="energy">能源/普通</button>
+<div id="box">
+
+</div>
 <script src="dist/keyboard.js"></script>
 <script>
     let updateFuc = function (value) {
-        document.querySelector("#vpl").innerHTML = value
+        document.querySelector("#vpl").innerHTML = value.join('')
     }
     let keyboard = new IrainPlateKeyboard({type:"h5",updateFunction:updateFuc})
     document.querySelector("#open").addEventListener("click", function () {
@@ -20,6 +24,9 @@
     })
     document.querySelector("#close").addEventListener("click", function () {
         keyboard.close()
+    })
+    document.querySelector("#energy").addEventListener("click", function () {
+        keyboard.changeType()
     })
 </script>
 </body>
