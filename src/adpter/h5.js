@@ -43,8 +43,18 @@ class H5 {
     }
 
     //删除操作
-    delete() {
+    delete(value) {
+        this.op = value;
+    }
 
+    // 更多操作
+    more(value) {
+        this.op = value;
+    }
+
+    // 返回操作
+    back(value) {
+        this.op = value;
     }
 
     // 获取禁用按钮数组
@@ -74,6 +84,7 @@ class H5 {
         let itemValues = this.buildKeys(Letter[layoutType]());
         itemValues.map((item, index) => {
             let value = item.key
+            // 生成占位元素
             if (layoutType === 'getProvinces' && (index === 20 || index === 28)) {
                 template += ` <${this.item()} class="key ${prefix}-${layoutType}-${index}" style="visibility:hidden;"><span></span></${this.item()}>`
             }
@@ -105,10 +116,6 @@ class H5 {
 
         this.container = document.querySelector("#irain-plate-keyboard")
 
-        // 移除事件
-        if(document.querySelector(`.${prefix}-more`)) {
-            document.querySelector(`.${prefix}-more`).removeEventListener('click', function() {});
-        }
         //绑定监听事件，剔除禁用按钮
         let _this = this
         for (let index in itemValues) {
@@ -120,58 +127,27 @@ class H5 {
             }
         }
 
-        // 更多、返回事件绑定
-        this.boundEventList(layoutType, prefix);
+        // 点击更多按钮
+        let moreDom = document.querySelector(`.${prefix}-more`);
+        if (moreDom) {
+            moreDom.addEventListener("click", function () {
+                _this.more('more');
+            })
+        }
+
+        // 点击返回按钮
+        let backDom = document.querySelector(`.${prefix}-back`);
+        if (backDom) {
+            backDom.addEventListener("click", function () {
+                _this.back('back');
+            })
+        }
 
         // 点击删除按钮
         document.querySelector(`.${prefix}-delete`).addEventListener("click", function () {
-            _this.delete();
+            _this.delete('delete');
         })
     }
-
-    // 更多、返回
-    boundEventList(layoutType, prefix) {
-        let _this = this;
-        let moreDom = document.querySelector(`.${prefix}-more`);
-        let backDom = document.querySelector(`.${prefix}-back`);
-
-        // 更多按钮事件
-        if (moreDom) {
-            switch (layoutType) {
-                case 'getProvinces':
-                    moreDom.addEventListener("click", function () {
-                        _this.setContainerContent('getMore', 1);
-                    });
-                    break;
-                // 最后一位：更多按钮
-                case 'getNumberAndLetterHasI':
-                    moreDom.addEventListener("click", function () {
-                        _this.setContainerContent('getStudy', 1);
-                    });
-                    break;
-                default: ;
-            }
-        }
-
-        // 返回按钮事件
-        if (backDom) {
-            switch (layoutType) {
-                case 'getMore':
-                    backDom.addEventListener("click", function () {
-                        _this.setContainerContent('getProvinces', 0);
-                    });
-                    break;
-                // 最后一位：返回按钮
-                case 'getStudy':
-                    backDom.addEventListener("click", function () {
-                        _this.setContainerContent('getNumberAndLetterHasI', 0);
-                    });
-                    break;
-                default: ;
-            }
-        }
-    }
-
 }
 
 export default H5

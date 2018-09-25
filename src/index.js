@@ -63,7 +63,7 @@ export default class IrainPlateKeyboard {
      */
     view(pageType,type) {
         let template = ""
-        //省份键盘
+        // 获取键盘视图
         template=this.appType.setContainerContent(pageType, type)
 
         return template
@@ -75,32 +75,53 @@ export default class IrainPlateKeyboard {
      */
     click(value) {
         // 已输入的车牌长度
-        let currIndex = this.vpl.length + 1;
+        let currIndex = this.vpl.length;
         this.maxLen = this.isEnergy ? 8 : 7;
-        if(currIndex > this.maxLen) {
-            this.vpl.splice(this.maxLen - 1, 1, value);
-            this.updateFunction(this.vpl)
-            return;
-        };
-
-        // 根据不同value做不同操作赋值操作
-        this.vpl.push(value);
-        this.appType.copyVpl = this.vpl;
-
-        // 当前输入的位数
-        currIndex = this.vpl.length
-        this.getDisabledLetters(currIndex, this.vpl)
-        this.buildKeyBoard(currIndex, this.vpl)
         
-        this.updateFunction(this.vpl)
+        switch (value) {
+            case 'delete':
+                // 删除
+                this.vpl.splice(this.vpl.length - 1, 1);
+                // 当前输入的位数
+                currIndex = this.vpl.length
+                this.getDisabledLetters(currIndex, this.vpl)
+                this.buildKeyBoard(currIndex, this.vpl)
+
+                this.updateFunction(this.vpl)
+                break;
+            case 'more':
+                // 更多
+                this.getMoreKeyBoard(this.vpl);
+                break;
+            case 'back':
+                // 更多
+                this.getBackKeyBoard(this.vpl);
+                break;
+            default: 
+                if(currIndex >= this.maxLen) {
+                    this.vpl.splice(this.maxLen - 1, 1, value);
+                    this.updateFunction(this.vpl)
+                    return;
+                };
+                // 根据不同value做不同操作赋值操作
+                this.vpl.push(value);
+                // 当前输入的位数
+                currIndex = this.vpl.length
+                this.getDisabledLetters(currIndex, this.vpl)
+                this.buildKeyBoard(currIndex, this.vpl)
+
+                this.updateFunction(this.vpl)
+        }
     }
 
     // 组件键盘
     buildKeyBoard(index, vpl) {
+        if(index === 0) {
+            this.view("getProvinces", 0)
+        }
         if(index === 1) {
             switch(vpl[index - 1]) {
                 case '民':
-                    // this.vpl.push('航')
                     this.view("getStudy", 3)
                     break;
                 default: 
@@ -111,7 +132,7 @@ export default class IrainPlateKeyboard {
         if(index === 2) {
             switch(vpl.join('')) {
                 case 'WJ':
-                    this.view("getProvinces", 0)
+                    this.view("getProvinces", 3)
                     break;
                 default: 
                     // 前两位： 非'WJ'
@@ -123,7 +144,7 @@ export default class IrainPlateKeyboard {
         }
 
         // 最后一位显示”更多“
-        if (index === this.maxLen) {
+        if (index === this.maxLen - 1) {
             let frontFir = vpl[0];
             let frontSec = vpl[0] + vpl[1];
             if (frontSec === 'WJ' || frontFir === '民' || frontFir === '使') {
@@ -161,27 +182,38 @@ export default class IrainPlateKeyboard {
         }
     }
 
-    /**
-     * 更新已输入车牌
-     */
-    /* updateVpl(val) {
-        // console.log(val);
-        // 已输入的车牌长度
-        let currIndex = this.vpl.length + 1;
-        let maxLen = this.isEnergy ? 8 : 7;
-        if(currIndex > maxLen) return;
+    // 获取更多视图
+    getMoreKeyBoard(vpl) {
+        let Len = vpl.length;
+        let max = this.maxLen;
+        switch (Len) {
+            case 0: 
+                this.view("getMore", 1);
+                break;
+            case (max - 1): ;
+            case max:
+                this.view("getStudy", 1);
+                break;
+            default: ;
+        }
+    }
 
-        //根据不同value做不同操作赋值操作
-        this.vpl = val;
-        // this.appType.copyVpl = this.vpl;
-
-        // 当前输入的位数
-        currIndex = this.vpl.length
-        this.getDisabledLetters(currIndex, this.vpl)
-        this.buildKeyBoard(currIndex, this.vpl)
-        
-        this.updateFunction(this.vpl)
-    } */
+    // 返回
+    getBackKeyBoard(vpl) {
+        let Len = vpl.length;
+        let max = this.maxLen;
+        switch (Len) {
+            case 0: ;
+            case 1:
+                this.view("getProvinces", 0);
+                break;
+            case (max - 1): ;
+            case max:
+                this.view("getNumberAndLetterHasI", 0);
+                break;
+            default: ;
+        }
+    }
 
     /**
      * 键盘初始化视图数据绑定
@@ -195,12 +227,6 @@ export default class IrainPlateKeyboard {
                 _this.click(value)
             }
         });
-        // Object.defineProperty(this.appType, "copyVpl", {
-        //     set: function (value) {
-        //         //当设置值的时候触发的函数,设置的新值通过参数value拿到
-        //         _this.updateVpl(value)
-        //     }
-        // });
     }
 
 
