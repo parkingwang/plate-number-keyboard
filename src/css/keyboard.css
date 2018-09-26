@@ -1,7 +1,6 @@
 /*键盘样式*/           
 #irain-plate-keyboard {
     width: 100%;
-    /* height: 40%; */
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -29,6 +28,7 @@
     box-sizing: border-box;
 }
 
+/* 右边沿按键 */
 .key:nth-child(10n + 10) {
     margin-right: 0;
 }
@@ -43,19 +43,9 @@
     transform: translateY(-50%);
 }
 
+/* 操作按钮 */
 .operate {
     flex: 0 0 15%;
-    align-self: flex-end!important;
-    /* width: 15%; */
-    /* margin-right: 0.5%; */
-}
-
-.irain-keyborad-back, .irain-keyborad-more {
-    /* margin-left: auto; */
-}
-
-.operate:last-child {
-    /* margin-right: 0; */
 }
 
 /* 禁用按钮样式 */
