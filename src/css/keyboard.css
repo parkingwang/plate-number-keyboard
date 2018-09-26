@@ -1,5 +1,8 @@
 /*键盘样式*/           
 #irain-plate-keyboard {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -59,4 +62,19 @@
 }
 .key.irain-keyborad-getMore-29 {
     margin-right: calc((100% - 9.5% * 10)/9);
+}
+
+/* 字体适配 */
+@media screen and (max-width : 667px) {
+    .key {
+        font-size: 14px;
+        border-radius: 4px;
+    }
+}
+/* ipad */
+@media (min-width: 668px) and (max-width: 768px) {
+    .key {
+        font-size: 20px;
+        border-radius: 8px;
+    }
 }
