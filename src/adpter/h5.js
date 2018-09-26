@@ -4,19 +4,10 @@ import { Level } from "chalk";
 class H5 {
     constructor() {
         this.buttonlayout = {}
-        this.copyVpl = []
-        // 禁用数组下标
-        this.disInd = ''
-        // 禁用取反标志
+        // 禁用规则取反标志
         this.negation = false
-        this.disabledArrLetters = {
-            // 民航
-            0: ['航'],
-            // WJ
-            1: ['J'],
-            // 新能源第三位/第八位
-            2: ['D', 'F']
-        }
+        // 禁用数组
+        this.disabledArrLetters = []
     }
 
     //外层包裹元素
@@ -64,14 +55,17 @@ class H5 {
         this.op = value;
     }
     // 获取禁用按钮数组
-    getDisabledLettersArr(val) {
-        return this.disabledArrLetters[val]
+    getDisabledLettersArr(val, tag) {
+        return {
+            disArr: val,
+            isNegation: tag
+        };
     }
 
     // 构建键盘按钮
     buildKeys(letters) {
         let map = new Array();
-        let disabledArr = new Set(this.getDisabledLettersArr(this.disInd));
+        let disabledArr = new Set(this.disabledArrLetters);
         letters.forEach((item, index) => {
             // 禁用时，是否与传入值取反
             let negation = this.negation ? !disabledArr.has(item) : disabledArr.has(item)

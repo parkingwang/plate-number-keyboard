@@ -15,7 +15,16 @@ export default class IrainPlateKeyboard {
         }
         this.vpl = []
         this.isEnergy = false
-        this.maxLen = 7;
+        this.maxLen = 7
+        // 禁用规则
+        this.disabledArrLetters = {
+            // 民航
+            0: ['航'],
+            // WJ
+            1: ['J'],
+            // 新能源第三位/第八位
+            2: ['D', 'F']
+        }
         this.updateFunction = options.updateFunction
         this.onSureFunction = options.onSureFunction
         this.init()
@@ -55,6 +64,11 @@ export default class IrainPlateKeyboard {
         if(this.vpl.length >= 1) {
             this.vpl.splice(0, this.vpl.length);
         }
+    }
+
+    // 获取禁用规则
+    getDisabledLettersArr(val) {
+        return this.disabledArrLetters[val]
     }
 
     /**
@@ -162,27 +176,28 @@ export default class IrainPlateKeyboard {
 
     // 获取不可用按钮
     getDisabledLetters(index, vpl) {
-        this.appType.disInd = '';
         this.appType.negation = false;
+        this.appType.disabledArrLetters = [];
         if (!this.isEnergy) {
             if(index === 1) {
                 switch(vpl[0]) {
                     case '民':
-                        this.appType.disInd = 0;
                         this.appType.negation = true;
+                        this.appType.disabledArrLetters = this.getDisabledLettersArr(0);
                         break;
                     case 'W':
-                        this.appType.disInd = 1;
                         this.appType.negation = true;
+                        this.appType.disabledArrLetters = this.getDisabledLettersArr(1);
                         break;
                     default: ;
                 }
             }
         } else {
+            // 新能源第三/第八位
             if(index === 2 || index === 7) {
                 // 只有E、F高亮
-                this.appType.disInd = 2;
                 this.appType.negation = true;
+                this.appType.disabledArrLetters = this.getDisabledLettersArr(2);
             }
         }
     }
