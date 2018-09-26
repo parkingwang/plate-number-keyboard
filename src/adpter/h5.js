@@ -86,7 +86,7 @@ class H5 {
             let value = item.key
             // 生成占位元素
             if (layoutType === 'getProvinces' && (index === 20 || index === 28)) {
-                template += ` <${this.item()} class="key ${prefix}-${layoutType}-${index}" style="visibility:hidden;"><span></span></${this.item()}>`
+                template += ` <${this.item()} class="key" style="visibility:hidden;"></${this.item()}>`
             }
             if(item.disabled) {
                 template += ` <${this.item()} class="key ${prefix}-${layoutType}-${index} ${prefix}-disabled"><span>${value}</span></${this.item()}>`
@@ -94,6 +94,8 @@ class H5 {
                 template += ` <${this.item()} class="key ${prefix}-${layoutType}-${index}"><span>${value}</span></${this.item()}>`
             }
         })
+        // 最后一行占位元素
+        template += ` <${this.item()} class="key" style="visibility:hidden;flex: 1;width: auto;"></${this.item()}>`
 
         switch (type) {
             case 0:
