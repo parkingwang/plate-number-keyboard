@@ -18,7 +18,11 @@
     let updateFuc = function (value) {
         document.querySelector("#vpl").innerHTML = value.join('')
     }
-    let keyboard = new IrainPlateKeyboard({type:"h5",updateFunction:updateFuc})
+
+    let sureFun = function (value) {
+        console.log('当前输入的车牌为：' + value.join(''));
+    }
+    let keyboard = new IrainPlateKeyboard({type:"h5",updateFunction:updateFuc,onSureFunction: sureFun})
     document.querySelector("#open").addEventListener("click", function () {
         keyboard.show()
     })

@@ -17,6 +17,7 @@ export default class IrainPlateKeyboard {
         this.isEnergy = false
         this.maxLen = 7;
         this.updateFunction = options.updateFunction
+        this.onSureFunction = options.onSureFunction
         this.init()
     }
 
@@ -96,6 +97,10 @@ export default class IrainPlateKeyboard {
             case 'back':
                 // 更多
                 this.getBackKeyBoard(this.vpl);
+                break;
+            case 'sure':
+                // 确定
+                this.onSureFunction(this.vpl);
                 break;
             default: 
                 if(currIndex >= this.maxLen) {

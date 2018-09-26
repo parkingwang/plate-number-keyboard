@@ -5,7 +5,9 @@ class H5 {
     constructor() {
         this.buttonlayout = {}
         this.copyVpl = []
+        // 禁用数组下标
         this.disInd = ''
+        // 禁用取反标志
         this.negation = false
         this.disabledArrLetters = {
             // 民航
@@ -57,6 +59,10 @@ class H5 {
         this.op = value;
     }
 
+    // 确定操作
+    sure(value) {
+        this.op = value;
+    }
     // 获取禁用按钮数组
     getDisabledLettersArr(val) {
         return this.disabledArrLetters[val]
@@ -148,6 +154,11 @@ class H5 {
         // 点击删除按钮
         document.querySelector(`.${prefix}-delete`).addEventListener("click", function () {
             _this.delete('delete');
+        })
+
+        // 点击确定按钮
+        document.querySelector(`.${prefix}-sure`).addEventListener("click", function () {
+            _this.sure('sure');
         })
     }
 }
