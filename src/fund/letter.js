@@ -44,11 +44,11 @@ class Letter {
     }
 
     getNumberAndLetterHasI() {
-        return this.numbers.concat(this.letterNotHasI)
+        return this.numbers.concat(this.letterHasI)
     }
 
     getNumberAndLetterNotHasI() {
-        return this.study.concat(this.numbers, this.letterNotHasI)
+        return this.numbers.concat(this.letterNotHasI)
     }
 
     getStudy() {

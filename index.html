@@ -1,37 +1,166 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
     <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
     <title>Title</title>
 </head>
 <body>
-<div type="text" id="vpl"></div>
 
-<button id="open">打开</button>
-<button id="close">关闭</button>
-<button id="energy">能源/普通</button>
-<div id="box">
+<ul class="irain-keyboard-demon">
+                <li class="word active"></li>
+                <li class="sep">|</li>
+                <li class="word"></li>
+                <li class="sep">|</li>
+                <li class="word"></li>
+                <li class="sep">|</li>
+                <li class="word"></li>
+                <li class="sep">|</li>
+                <li class="word"></li>
+                <li class="sep">|</li>
+                <li class="word"></li>
+                <li class="sep">|</li>
+                <li class="word"></li>
+                <li class="sep extra">|</li>
+                <li class="word extra"></li>            
+</ul>
 
+<div class="switch">
+      <i></i>
+      <span>切换新能源车牌</span>
 </div>
+
+<div id="irain-keyboard">
+</div>
+		
+<script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
 <script src="dist/keyboard.js"></script>
 <script>
+    var vpl_number = $('.word').text();
+	keyboard_type == 0
+	var keyboard_type = vpl_number.length > 7 ? 5 : 0;
+	
+	
     let updateFuc = function (value) {
-        document.querySelector("#vpl").innerHTML = value.join('')
+       // document.querySelector("#vpl").innerHTML = value
     }
 
     let sureFun = function (value) {
-        console.log('当前输入的车牌为：' + value.join(''));
+        console.log('当前输入的车牌为：value');
     }
-    let keyboard = new IrainPlateKeyboard({type:"h5",updateFunction:updateFuc,onSureFunction: sureFun})
-    document.querySelector("#open").addEventListener("click", function () {
-        keyboard.show()
-    })
-    document.querySelector("#close").addEventListener("click", function () {
-        keyboard.close()
-    })
-    document.querySelector("#energy").addEventListener("click", function () {
-        keyboard.changeType()
-    })
+     
+    let comFun = function (value) {
+	   console.log(vpl_number);
+    }
+	
+    let keyboard = new IrainPlateKeyboard({type:"h5",updateFunction:updateFuc,onSureFunction: sureFun,complateFunction:comFun})
+	keyboard.close();
+
+
+    
+	let delText = function () {
+	
+         var now_active = $('.word.active');
+        if (now_active.text() != '') {
+            now_active.text('');
+        } else {
+            if (now_active.prevAll('.word').size() > 0) {
+                now_active.prevAll('.word').eq(0).addClass('active');
+                now_active.prevAll('.word').eq(0).text('');
+                now_active.removeClass('active');
+            }
+        }
+        vpl_number = $('.word').text();
+        var index = $('.word').index($('.word.active'));
+        keyboard.setUpdateVpl(vpl_number,index)
+    }
+	
+    let appendText = function (text) {
+        var now_active = $('.word.active');
+        now_active.text(text);
+        if (now_active.nextAll('.word').not(':hidden').size() > 0) {
+            now_active.nextAll('.word').eq(0).addClass('active');
+            now_active.removeClass('active');
+        } else {
+            is_auto_redirect = true;
+        }
+        vpl_number = $('.word').text();
+        var index = $('.word').index($('.word.active'));
+        if (index == 1) {
+            if (text == 'W') {
+                index++;
+               keyboard.click('J');
+            }
+        }
+
+        if (index == 3 && $('.word').eq(0).text() == 'W' && $('.word').eq(1).text() == 'J') {
+            if (isNaN(text)) {
+                vpl_size = 15;
+                $('.park-card li').css({'width': 'calc(100% / ' + vpl_size + ')'});
+                $('.extra').show();
+            } else {
+                $('.park-card li').css({'width': 'calc(100% / ' + vpl_size + ')'});
+                if (vpl_size == 13) {
+                    $('.extra').hide();
+                }
+            }
+        }
+
+        keyboard.setUpdateVpl(vpl_number,index)
+    }
+
+    keyboard.appendText = appendText
+    keyboard.delText = delText
+    
+	//点击车牌逻辑处理
+	//车牌处理
+           $('.word').click(function () {
+                $('.word').removeClass('active');
+                $(this).addClass('active');
+
+                var index = $('.word').index(this);
+				keyboard.setUpdateVpl(vpl_number,index)
+                event.stopPropagation();
+                keyboard.show();
+
+                is_auto_redirect = false;
+            });
+            
+			    $('.switch span').on('click', function() {
+                if (keyboard_type == 0) {
+                    keyboard_type = 5;
+                    $('.park-card li').css({'width': 'calc(100% / 15)'});
+                    $('.extra').show();
+                    $('.switch span').text('切换普通车牌');
+                } else {
+                    keyboard_type = 0;
+                    $('.park-card li').css({'width': 'calc(100% / ' + vpl_size + ')'});
+                    if (vpl_size == 13) {
+                        $('.extra').hide();
+                    }
+                    $('.switch span').text('切换新能源车牌');
+                    if (vpl_number.length > 7) {
+                        vpl_number = vpl_number.substr(0, 7);
+                        var tmp = $('.word.active');
+                        tmp.prevAll('.word').eq(0).addClass('active');
+                        tmp.removeClass('active');
+                    }
+                }
+				keyboard.changeType()
+                var index = $('.word').index($('.word.active'));
+                keyboard.setUpdateVpl(vpl_number,index)
+                event.stopPropagation();
+                keyboard.show();
+            });
+	    
+ 
+	
+	
+	
+	
+	
 </script>
 </body>
 </html>

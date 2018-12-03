@@ -16,8 +16,7 @@ export default class IrainPlateKeyboard {
         this.vpl = []
         this.isEnergy = false
         this.maxLen = 7
-		this.currIndex = 0;
-		this.type = 1;
+		this.currIndex = -1;
         // 禁用规则
         this.disabledArrLetters = {
             // 民航
@@ -27,12 +26,6 @@ export default class IrainPlateKeyboard {
             // 新能源第三位/第八位
             2: ['D', 'F']
         }
-		
-		let exceptO = Letter.getNumberAndLetterHasI();
-		exceptO.splice(exceptO.indexOf('O'),1)
-		this.disabledArrLetters[3] = exceptO
-	    this.disabledArrLetters[4] = ['D', 'F'].concat(Letter.numbers)
-		
         this.updateFunction = options.updateFunction
         this.onSureFunction = options.onSureFunction
         this.complateFunction = options.complateFunction
@@ -53,20 +46,10 @@ export default class IrainPlateKeyboard {
         this.appType.close()
     }
 
-   setUpdateVpl(vpl,index){
+   setUpdateVpl(vpl,index=-1){
         this.currIndex=index
-		this.vpl = vpl.split('')
-		
 		this.getDisabledLetters(this.currIndex, this.vpl)
         this.buildKeyBoard(this.currIndex, this.vpl)
-		if((this.vpl.length> 2 && (this.vpl[0]+this.vpl[1])=="WJ") || this.isEnergy==true){
-			this.maxLen=8
-		}else{
-			this.maxLen=7;
-		}
-	    if(this.vpl.join('').length === this.maxLen){
-			this.complateFunction(this.vpl.join(''))
-		}
    }
 
     /* 
@@ -104,14 +87,6 @@ export default class IrainPlateKeyboard {
     view(pageType,type) {
         let template = ""
         // 获取键盘视图
-		if(pageType=='getNumberAndLetterHasI'&&this.currIndex!=1){
-			this.appType.negation = true;
-			this.appType.disabledArrLetters = this.getDisabledLettersArr(3);
-		}
-		if(this.currIndex==2 && this.isEnergy){
-			this.appType.negation = true;
-            this.appType.disabledArrLetters = this.getDisabledLettersArr(4);
-		}
         template=this.appType.setContainerContent(pageType, type)
 
         return template
@@ -123,24 +98,24 @@ export default class IrainPlateKeyboard {
      */
     click(value) {
         // 已输入的车牌长度
-        let currIndex = this.currIndex
+        let currIndex = this.vpl.length;
         this.maxLen = this.isEnergy ? 8 : 7;
+		
+		if(this.currIndex > -1){
+			currIndex = this.currIndex;
+		}
+        
         switch (value) {
-			
             case 'delete':
                 // 删除
-				if(this.type==1){
-				    this.delText();
-					currIndex-=1
-				}else{
-					this.vpl.splice(this.vpl.length - 1, 1);
-					// 当前输入的位数
-					currIndex = this.vpl.length
-					this.getDisabledLetters(currIndex, this.vpl)
-                    this.buildKeyBoard(currIndex, this.vpl)
-					
-				}
-                this.updateFunction(this.vpl.join(''))
+				this.delText();
+                this.vpl.splice(this.vpl.length - 1, 1);
+                // 当前输入的位数
+                currIndex = this.vpl.length
+                this.getDisabledLetters(currIndex, this.vpl)
+                this.buildKeyBoard(currIndex, this.vpl)
+
+                this.updateFunction(this.vpl)
                 break;
             case 'more':
                 // 更多
@@ -152,30 +127,29 @@ export default class IrainPlateKeyboard {
                 break;
             case 'sure':
                 // 确定
-				if(this.vpl.join('').length>= this.maxLen){
-					this.onSureFunction(this.vpl.join(''));
-				}
+                this.onSureFunction(this.vpl.join());
                 break;
             default: 
-				if(this.type>1){
-					if(currIndex >= this.maxLen) {
-						this.vpl.splice(this.maxLen - 1, 1, value);
-						this.updateFunction(this.vpl.join(''))
-						this.complateFunction(this.vpl.join(''))
-						return;
-					};
-					//更新某一位置
-					// 根据不同value做不同操作赋值操作
-					this.vpl[currIndex]=value;
-					// 当前输入的位数
-					currIndex += 1
-					this.currIndex=currIndex;
-					this.getDisabledLetters(currIndex, this.vpl)
-					this.buildKeyBoard(currIndex, this.vpl)
-				}else{
-					 this.appendText(value)
-				}
-                this.updateFunction(this.vpl.join(''))
+			    this.appendText(value)
+                if(currIndex === this.maxLen-1){
+                    this.complateFunction(this.vpl.join(''))
+                }
+                if(currIndex >= this.maxLen) {
+                    this.vpl.splice(this.maxLen - 1, 1, value);
+                    this.updateFunction(this.vpl.join(''))
+                    this.complateFunction(this.vpl.join(''))
+                    return;
+                };
+                //更新某一位置
+                // 根据不同value做不同操作赋值操作
+                this.vpl[currIndex]=value;
+                // 当前输入的位数
+                currIndex += 1
+				this.currIndex=currIndex;
+                this.getDisabledLetters(currIndex, this.vpl)
+                this.buildKeyBoard(currIndex, this.vpl)
+
+                this.updateFunction(this.vpl.join())
         }
     }
 
@@ -204,7 +178,7 @@ export default class IrainPlateKeyboard {
                     this.view("getNumberAndLetterHasI", 3)
             }
         }
-        if(index === 3 || index === 4 || index === 5 ) {
+        if(index === 3 || index === 4 || index === 5) {
             this.view("getNumberAndLetterHasI", 3)
         }
 
@@ -213,9 +187,9 @@ export default class IrainPlateKeyboard {
             let frontFir = vpl[0];
             let frontSec = vpl[0] + vpl[1];
             if (frontSec === 'WJ' || frontFir === '民' || frontFir === '使') {
-                this.view("getNumberAndLetterNotHasI", 3)
+                this.view("getNumberAndLetterHasI", 3)
             } else {
-                this.view("getNumberAndLetterNotHasI", 0)
+                this.view("getNumberAndLetterHasI", 0)
             } 
         }
     }
@@ -236,23 +210,21 @@ export default class IrainPlateKeyboard {
                         this.appType.disabledArrLetters = this.getDisabledLettersArr(1);
                         break;
                     default: ;
-					
                 }
             }
         } else {
             // 新能源第三/第八位
-            if(index === 7) {
+            if(index === 2 || index === 7) {
                 // 只有E、F高亮
-			
                 this.appType.negation = true;
-                this.appType.disabledArrLetters = this.getDisabledLettersArr(4);
+                this.appType.disabledArrLetters = this.getDisabledLettersArr(2);
             }
         }
     }
 
     // 获取更多视图
     getMoreKeyBoard(vpl) {
-        let Len = this.currIndex;
+        let Len = vpl.length;
         let max = this.maxLen;
         switch (Len) {
             case 0: 
@@ -268,7 +240,7 @@ export default class IrainPlateKeyboard {
 
     // 返回
     getBackKeyBoard(vpl) {
-        let Len = this.currIndex;
+        let Len = vpl.length;
         let max = this.maxLen;
         switch (Len) {
             case 0: ;
@@ -277,7 +249,7 @@ export default class IrainPlateKeyboard {
                 break;
             case (max - 1): ;
             case max:
-                this.view("getNumberAndLetterNotHasI", 0);
+                this.view("getNumberAndLetterHasI", 0);
                 break;
             default: ;
         }

@@ -1,4 +1,7 @@
-/*键盘样式*/           
+/*键盘样式*/   
+#irain-keyboard {
+	z-index:99999;
+}        
 #irain-plate-keyboard {
     position: fixed;
     bottom: 0;
@@ -10,6 +13,7 @@
     border: 5px solid #eef0f4;
     background: #eef0f4;
     box-sizing: border-box;
+	z-index:99999;
 }
 
 /* 按键样式 */
@@ -80,4 +84,28 @@
         border-radius: 8px;
         padding-bottom: 11%;
     }
+}
+
+
+
+
+.irain-keyboard-demon li{
+	float:left;
+	list-style-type:none;
+	
+}
+
+
+.irain-keyboard-demon .word{
+	width:18px;
+	height:18px;
+}
+
+.irain-keyboard-demon li.active{
+	border-bottom:1px solid red;
+}
+
+
+.irain-keyboard-demon .extra{
+   display:none;	
 }

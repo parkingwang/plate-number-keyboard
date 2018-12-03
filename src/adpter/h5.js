@@ -82,6 +82,7 @@ class H5 {
         let template = `<${this.wrap()} id="irain-plate-keyboard">`
         let prefix = "irain-keyborad"
         let itemValues = this.buildKeys(Letter[layoutType]());
+		
         itemValues.map((item, index) => {
             let value = item.key
             // 生成占位元素
@@ -114,14 +115,18 @@ class H5 {
                 break;
         }
         template += `</${this.wrap()}>`
-        document.getElementById("box").innerHTML = template
+        document.getElementById("irain-keyboard").innerHTML = template
 
         this.container = document.querySelector("#irain-plate-keyboard")
 
         //绑定监听事件，剔除禁用按钮
         let _this = this
         for (let index in itemValues) {
-            let classList = document.querySelector(`.${prefix}-${layoutType}-${index}`).classList;
+			let button = document.querySelector(`.${prefix}-${layoutType}-${index}`);
+			if(button==null){
+				continue;
+			}
+            let classList = button.classList;
             if(classList.contains(`${prefix}-disabled`)==false) {
                 let item = document.querySelector(`.${prefix}-${layoutType}-${index}`).addEventListener("click", function () {
                     _this.input(itemValues[index].key)
@@ -154,6 +159,20 @@ class H5 {
         document.querySelector(`.${prefix}-sure`).addEventListener("click", function () {
             _this.sure('sure');
         })
+		
+		 //阻止冒泡事件
+        document.querySelector(`#irain-plate-keyboard`).addEventListener("click", function (event) {
+             event.stopPropagation();
+              event.cancelBubble = true;
+        })
+		
+		// 点击确定按钮
+        document.querySelector(`body`).addEventListener("click", function () {
+           _this.close()
+        })
+		
+		
+		
     }
 }
 
